@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: smart-notify
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/smartnotify
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: smart-notify-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: '*'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: "*"
+server:
+  port: 8080
+
+telegram:
+  bot:
+    username:
+    token:
+
+twilio:
+  accountSid:
+  authToken:
+  phoneNumber:
