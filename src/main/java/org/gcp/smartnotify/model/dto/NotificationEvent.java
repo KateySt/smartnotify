@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gcp.smartnotify.enums.Channel;
 
+import java.time.Instant;
 import java.util.Map;
 
 @Data
@@ -15,7 +16,9 @@ import java.util.Map;
 public class NotificationEvent {
   private String userId;
   private String message;
-  private Channel type;
+  private Instant scheduledAt;
+  private Channel channel;
+  private Long telegramId;
 
   private String to;
   private String subject;

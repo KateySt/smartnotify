@@ -26,7 +26,7 @@ public class SmsNotification implements NotificationSender {
   public void send(NotificationEvent event) {
     try {
       Twilio.init(accountSid, authToken);
-
+      log.info("SMS sent successfully to {}. SID: {}", event.getTo(), fromNumber);
       final Message message = Message.creator(
           new PhoneNumber(event.getTo()),
           new PhoneNumber(fromNumber),

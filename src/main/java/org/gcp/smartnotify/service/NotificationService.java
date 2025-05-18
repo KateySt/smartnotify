@@ -23,11 +23,11 @@ public class NotificationService {
   }
 
   public void dispatch(NotificationEvent event) {
-    final NotificationSender sender = senders.get(event.getType());
+    final NotificationSender sender = senders.get(event.getChannel());
     if (sender != null) {
       sender.send(event);
     } else {
-      throw new IllegalArgumentException("Unsupported channel: " + event.getType());
+      throw new IllegalArgumentException("Unsupported channel: " + event.getChannel());
     }
   }
 

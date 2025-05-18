@@ -9,7 +9,8 @@ public enum BotCommandType {
   SUBSCRIBE("/subscribe", "Subscribe to notifications", "You have successfully subscribed to notifications!"),
   EMAIL("/email", "Add email for notification", "You have successfully subscribed to mail notifications!"),
   EMAIL_VERIFY("/verify", "Verify your email. Please enter the verification code like this: /verify 123ABC", "Email verified successfully!"),
-  PHONE("/phone", "Add phone number for notification", "Please enter your phone number:");
+  PHONE("/phone", "Add phone number for notification", "Please enter your phone number:"),
+  UPLOAD_CSV("/uploadcsv", "Upload CSV with rules", "Please send the .csv file now.");
 
   private final String command;
   private final String description;
