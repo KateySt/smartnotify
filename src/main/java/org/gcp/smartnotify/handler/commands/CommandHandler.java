@@ -87,6 +87,7 @@ public class CommandHandler {
           for (Channel ch : Channel.values()) {
             final boolean selected = savedRule.getChannel().contains(ch);
             final InlineKeyboardButton button = new InlineKeyboardButton();
+            
             button.setText((selected ? "✅ " : "") + ch.name());
             button.setCallbackData("toggle_channel_" + ch.name());
             rows.add(List.of(button));
