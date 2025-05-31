@@ -15,7 +15,7 @@ import java.time.Instant;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class VerifyCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class VerifyCommand implements org.gcp.smartnotify.handler.Command {
 
   private final UserProfileRepository repository;
   private final MessageService messageService;

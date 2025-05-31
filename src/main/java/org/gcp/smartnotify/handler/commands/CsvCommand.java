@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class CsvCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class CsvCommand implements org.gcp.smartnotify.handler.Command {
 
   private final MessageService messageService;
   private final NotificationRuleRepository ruleRepository;

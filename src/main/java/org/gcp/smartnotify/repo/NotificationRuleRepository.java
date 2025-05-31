@@ -15,4 +15,6 @@ public interface NotificationRuleRepository extends ReactiveMongoRepository<Noti
   Flux<NotificationRule> findByScheduledAt(Instant scheduledAt);
 
   Flux<NotificationRule> findAllByScheduledAtBeforeAndActiveTrue(Instant before);
+
+  Flux<NotificationRule> findAllByTelegramId(Long chartId);
 }

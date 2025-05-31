@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class StartCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class StartCommand implements org.gcp.smartnotify.handler.Command {
 
   private final MessageService messageService;
   private final UserProfileRepository repository;

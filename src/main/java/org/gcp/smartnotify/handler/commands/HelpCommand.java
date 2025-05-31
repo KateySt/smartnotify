@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @AllArgsConstructor
-public class HelpCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class HelpCommand implements org.gcp.smartnotify.handler.Command {
 
   private final MessageService messageService;
 

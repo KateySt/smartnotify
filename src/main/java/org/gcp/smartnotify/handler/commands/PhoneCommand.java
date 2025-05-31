@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class PhoneCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class PhoneCommand implements org.gcp.smartnotify.handler.Command {
 
   private final MessageService messageService;
   private final UserProfileRepository repository;

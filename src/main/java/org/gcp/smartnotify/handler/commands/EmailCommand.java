@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class EmailCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class EmailCommand implements org.gcp.smartnotify.handler.Command {
 
   private final UserProfileRepository repository;
   private final EmailVerificationService emailService;

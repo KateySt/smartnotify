@@ -1,6 +1,7 @@
 package org.gcp.smartnotify.handler.commands;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gcp.smartnotify.enums.BotCommandType;
 import org.gcp.smartnotify.enums.Channel;
 import org.gcp.smartnotify.model.entity.NotificationRule;
@@ -18,12 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class CommandHandler {
-
   private final MessageService messageService;
   private final NotificationRuleRepository notificationRule;
-  private final List<org.gcp.smartnotify.handler.commands.Command> commands;
+  private final List<org.gcp.smartnotify.handler.Command> commands;
 
   public void handleUpdate(Update update) {
     if (update.hasMessage() && update.getMessage().hasText()) {

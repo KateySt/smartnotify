@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class SubscribeCommand implements org.gcp.smartnotify.handler.commands.Command {
+public class SubscribeCommand implements org.gcp.smartnotify.handler.Command {
 
   private final MessageService messageService;
   private final NotificationRuleRepository notificationRule;
