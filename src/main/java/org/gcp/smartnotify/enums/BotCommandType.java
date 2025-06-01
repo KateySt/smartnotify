@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum BotCommandType {
+  DELETE_RULES("/clearRules", "", ""),
   LIST_RULES("/listRules", "Get list of rules", ""),
   START("/start", "Start interacting with the bot", "Welcome to MindPoke!"),
   HELP("/help", "Get help about available commands", ""),
