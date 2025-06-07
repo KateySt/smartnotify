@@ -1,7 +1,7 @@
 package org.gcp.smartnotify.component;
 
 import org.gcp.smartnotify.model.SmartNotifyBot;
-import org.gcp.smartnotify.service.impl.BotSender;
+import org.gcp.smartnotify.service.BotSender;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

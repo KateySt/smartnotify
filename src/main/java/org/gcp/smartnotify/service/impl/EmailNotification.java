@@ -1,9 +1,9 @@
-package org.gcp.smartnotify.service;
+package org.gcp.smartnotify.service.impl;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.gcp.smartnotify.model.dto.NotificationEvent;
-import org.gcp.smartnotify.service.impl.NotificationSender;
+import org.gcp.smartnotify.service.NotificationSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

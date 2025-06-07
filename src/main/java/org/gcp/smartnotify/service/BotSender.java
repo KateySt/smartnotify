@@ -1,4 +1,4 @@
-package org.gcp.smartnotify.service.impl;
+package org.gcp.smartnotify.service;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 

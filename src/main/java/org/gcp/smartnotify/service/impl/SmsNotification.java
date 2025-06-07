@@ -1,11 +1,11 @@
-package org.gcp.smartnotify.service;
+package org.gcp.smartnotify.service.impl;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import lombok.extern.slf4j.Slf4j;
 import org.gcp.smartnotify.model.dto.NotificationEvent;
-import org.gcp.smartnotify.service.impl.NotificationSender;
+import org.gcp.smartnotify.service.NotificationSender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

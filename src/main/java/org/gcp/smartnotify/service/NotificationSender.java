@@ -1,4 +1,4 @@
-package org.gcp.smartnotify.service.impl;
+package org.gcp.smartnotify.service;
 
 import org.gcp.smartnotify.model.dto.NotificationEvent;
 

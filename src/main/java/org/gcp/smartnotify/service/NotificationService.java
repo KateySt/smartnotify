@@ -2,7 +2,9 @@ package org.gcp.smartnotify.service;
 
 import org.gcp.smartnotify.enums.Channel;
 import org.gcp.smartnotify.model.dto.NotificationEvent;
-import org.gcp.smartnotify.service.impl.NotificationSender;
+import org.gcp.smartnotify.service.impl.EmailNotification;
+import org.gcp.smartnotify.service.impl.SmsNotification;
+import org.gcp.smartnotify.service.impl.TelegramNotification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

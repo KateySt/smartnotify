@@ -1,9 +1,9 @@
-package org.gcp.smartnotify.service;
+package org.gcp.smartnotify.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.gcp.smartnotify.model.dto.NotificationEvent;
-import org.gcp.smartnotify.service.impl.BotSender;
-import org.gcp.smartnotify.service.impl.NotificationSender;
+import org.gcp.smartnotify.service.BotSender;
+import org.gcp.smartnotify.service.NotificationSender;
 import org.springframework.stereotype.Service;
 
 @Service
