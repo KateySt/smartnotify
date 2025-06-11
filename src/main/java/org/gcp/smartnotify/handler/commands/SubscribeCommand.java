@@ -1,6 +1,6 @@
 package org.gcp.smartnotify.handler.commands;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.gcp.smartnotify.enums.BotCommandType;
 import org.gcp.smartnotify.enums.Channel;
 import org.gcp.smartnotify.model.entity.NotificationRule;
@@ -17,41 +17,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SubscribeCommand implements org.gcp.smartnotify.handler.Command {
 
   private final MessageService messageService;
-  private final NotificationRuleRepository notificationRule;
+  private final NotificationRuleRepository notificationRuleRepository;
 
   @Override
   public void execute(Update update) {
-    final Long telegramId = update.getMessage().getFrom().getId();
-    final String chatId = update.getMessage().getChatId().toString();
+    Long telegramId = update.getMessage().getFrom().getId();
+    String chatId = update.getMessage().getChatId().toString();
 
-    notificationRule.findByTelegramId(telegramId)
-        .defaultIfEmpty(NotificationRule.builder()
-            .telegramId(telegramId)
-            .channel(new ArrayList<>())
-            .active(true)
-            .build())
+    notificationRuleRepository.findByTelegramId(telegramId)
+        .defaultIfEmpty(createDefaultRule(telegramId))
         .flatMap(rule -> {
-          final SendMessage message = new SendMessage();
-          message.setChatId(chatId);
-          message.setText("Choose your notification channels:");
-
-          final InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-          final List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-
-          for (Channel ch : Channel.values()) {
-            final boolean selected = rule.getChannel() != null && rule.getChannel().contains(ch);
-            final InlineKeyboardButton button = new InlineKeyboardButton();
-            button.setText((selected ? "✅ " : "") + ch.name());
-            button.setCallbackData("toggle_channel_" + ch.name());
-            rows.add(List.of(button));
-          }
-
-          markup.setKeyboard(rows);
-          message.setReplyMarkup(markup);
+          SendMessage message = SendMessage.builder()
+              .chatId(chatId)
+              .text("Choose your notification channels:")
+              .replyMarkup(buildChannelKeyboard(rule))
+              .build();
 
           messageService.sendMessage(message);
           return Mono.empty();
@@ -62,5 +46,32 @@ public class SubscribeCommand implements org.gcp.smartnotify.handler.Command {
   @Override
   public String getCommand() {
     return BotCommandType.SUBSCRIBE.getCommand();
+  }
+
+  private NotificationRule createDefaultRule(Long telegramId) {
+    return NotificationRule.builder()
+        .telegramId(telegramId)
+        .channel(new ArrayList<>())
+        .active(true)
+        .build();
+  }
+
+  private InlineKeyboardMarkup buildChannelKeyboard(NotificationRule rule) {
+    List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+    for (Channel channel : Channel.values()) {
+      boolean selected = rule.getChannel() != null && rule.getChannel().contains(channel);
+
+      InlineKeyboardButton button = InlineKeyboardButton.builder()
+          .text((selected ? "✅ " : "") + channel.name())
+          .callbackData("toggle_channel_" + channel.name())
+          .build();
+
+      rows.add(List.of(button));
+    }
+
+    return InlineKeyboardMarkup.builder()
+        .keyboard(rows)
+        .build();
   }
 }
