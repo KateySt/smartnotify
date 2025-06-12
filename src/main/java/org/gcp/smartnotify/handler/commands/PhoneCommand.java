@@ -24,53 +24,22 @@ public class PhoneCommand implements org.gcp.smartnotify.handler.Command {
 
   @Override
   public void execute(Update update) {
-    final String chatId = update.getMessage().getChatId().toString();
-    final String text = update.getMessage().getText();
+    String chatId = extractChatId(update);
+    String text = extractText(update);
 
-    if (text.equalsIgnoreCase(BotCommandType.PHONE.getCommand())) {
-      messageService.sendMessage(chatId, BotCommandType.PHONE.getMessage());
-      awaitingPhoneNumber.put(chatId, true);
-    } else if (awaitingPhoneNumber.getOrDefault(chatId, false)) {
-      if (isValidPhoneNumber(text)) {
-        Long telegramId;
-
-        try {
-          telegramId = Long.parseLong(chatId);
-        } catch (NumberFormatException e) {
-          messageService.sendMessage(chatId, "Error: Invalid Telegram ID format.");
-          awaitingPhoneNumber.remove(chatId);
-          return;
-        }
-        log.info("{}", telegramId);
-        repository.findByTelegramId(telegramId)
-            .flatMap(user -> {
-              user.setPhone(text);
-              return repository.save(user);
-            })
-            .doOnSuccess(savedUser -> {
-              log.info("--->{}", savedUser);
-              messageService.sendMessage(chatId, "You have successfully add phone!");
-              awaitingPhoneNumber.remove(chatId);
-            })
-            .switchIfEmpty(Mono.fromRunnable(() -> {
-              messageService.sendMessage(chatId, "User not found in the database.");
-              awaitingPhoneNumber.remove(chatId);
-            }))
-            .subscribe();
-
-      } else {
-        messageService.sendMessage(chatId, "Invalid phone number. Please try again.");
-      }
+    if (isPhoneCommand(text)) {
+      promptPhoneNumber(chatId);
+    } else if (isAwaitingPhone(chatId)) {
+      handlePhoneNumberInput(chatId, text);
     }
   }
 
   @Override
   public boolean shouldHandle(Update update) {
-    final String chatId = update.getMessage().getChatId().toString();
-    final String text = update.getMessage().getText();
+    String chatId = extractChatId(update);
+    String text = extractText(update);
 
-    if (text.equalsIgnoreCase(getCommand())) return true;
-    return awaitingPhoneNumber.getOrDefault(chatId, false);
+    return isPhoneCommand(text) || isAwaitingPhone(chatId);
   }
 
   @Override
@@ -78,7 +47,67 @@ public class PhoneCommand implements org.gcp.smartnotify.handler.Command {
     return BotCommandType.PHONE.getCommand();
   }
 
+  private boolean isPhoneCommand(String text) {
+    return BotCommandType.PHONE.getCommand().equalsIgnoreCase(text);
+  }
+
+  private boolean isAwaitingPhone(String chatId) {
+    return awaitingPhoneNumber.getOrDefault(chatId, false);
+  }
+
+  private void promptPhoneNumber(String chatId) {
+    messageService.sendMessage(chatId, BotCommandType.PHONE.getMessage());
+    awaitingPhoneNumber.put(chatId, true);
+  }
+
+  private void handlePhoneNumberInput(String chatId, String phone) {
+    if (!isValidPhoneNumber(phone)) {
+      messageService.sendMessage(chatId, "Invalid phone number. Please try again.");
+      return;
+    }
+
+    Long telegramId = parseTelegramId(chatId);
+    if (telegramId == null) {
+      messageService.sendMessage(chatId, "Error: Invalid Telegram ID format.");
+      awaitingPhoneNumber.remove(chatId);
+      return;
+    }
+
+    repository.findByTelegramId(telegramId)
+        .flatMap(user -> {
+          user.setPhone(phone);
+          return repository.save(user);
+        })
+        .doOnSuccess(savedUser -> {
+          log.info("User updated: {}", savedUser);
+          messageService.sendMessage(chatId, "You have successfully added your phone!");
+          awaitingPhoneNumber.remove(chatId);
+        })
+        .switchIfEmpty(Mono.fromRunnable(() -> {
+          messageService.sendMessage(chatId, "User not found in the database.");
+          awaitingPhoneNumber.remove(chatId);
+        }))
+        .subscribe();
+  }
+
+  private Long parseTelegramId(String chatId) {
+    try {
+      return Long.parseLong(chatId);
+    } catch (NumberFormatException e) {
+      log.warn("Failed to parse Telegram ID: {}", chatId, e);
+      return null;
+    }
+  }
+
   private boolean isValidPhoneNumber(String phone) {
     return phone != null && phone.matches("\\+?[0-9]{10,15}");
+  }
+
+  private String extractChatId(Update update) {
+    return update.getMessage().getChatId().toString();
+  }
+
+  private String extractText(Update update) {
+    return update.getMessage().getText();
   }
 }
